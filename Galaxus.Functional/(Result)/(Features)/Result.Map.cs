@@ -49,5 +49,17 @@ namespace Galaxus.Functional
                 }
             );
         }
+
+        /// <summary>
+        ///     Maps a <see cref="Result{TOk, TErr}" /> to <see cref="Result{TOkTo, TErr}" /> by applying a function to a contained
+        ///     <b>Ok</b> value,
+        ///     leaving an <b>Err</b> value untouched. This function can be used to compose the results of two functions.
+        /// </summary>
+        /// <typeparam name="TOkTo">The type to map <b>Ok</b> to.</typeparam>
+        /// <param name="map">The mapping function.</param>
+        public Result<TOkTo, TErr> FlatMap<TOkTo>(Func<TOk, Result<TOkTo, TErr>> map)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

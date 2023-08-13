@@ -570,4 +570,38 @@ public class ResultTests
         Assert.IsTrue(mappingResult.IsOk);
         Assert.AreEqual("Success", mappingResult.Ok.Unwrap());
     }
+
+    [Test]
+    public void Result_FlatMap_NullFunc()
+    {
+        var ok = Result<string, string>.FromOk("Success");
+        Assert.Throws<ArgumentNullException>(() => ok.FlatMap<int>(null));
+    }
+
+    [Test]
+    public void Result_FlatMap_IsOkToOk()
+    {
+        var ok = Result<string, string>.FromOk("Success");
+        var mappingResult = ok.FlatMap(s => Result<int, string>.FromOk(s.Length));
+        Assert.IsTrue(mappingResult.IsOk);
+        Assert.AreEqual(7, mappingResult.Ok.Unwrap());
+    }
+
+    [Test]
+    public void Result_FlatMap_IsOkToErr()
+    {
+        var ok = Result<string, string>.FromOk("Success");
+        var mappingResult = ok.FlatMap(s => Result<int, string>.FromErr("error"));
+        Assert.IsTrue(mappingResult.IsErr);
+        Assert.AreEqual("error", mappingResult.Err.Unwrap());
+    }
+
+    [Test]
+    public void Result_FlatMap_IsErrStaysTheSame()
+    {
+        var ok = Result<string, string>.FromErr("Failure");
+        var mappingResult = ok.FlatMap(s => Result<int, string>.FromOk(s.Length));
+        Assert.IsTrue(mappingResult.IsErr);
+        Assert.AreEqual("Failure", mappingResult.Err.Unwrap());
+    }
 }
